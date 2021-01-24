@@ -13,6 +13,10 @@ use Illuminate\Http\Response;
 
 use Artesaos\SEOTools\Facades\SEOTools;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\Opengraph;
+use Artesaos\SEOTools\Facades\TwitterCard;
+use Artesaos\SEOTools\Facades\JsonLd;
+
 
 
 
@@ -98,6 +102,32 @@ class BlogController extends Controller
         $relatedPosts = Post::with("categories:id,name,slug", "user:id,name,slug,avatar")->whereHas("categories", function (Builder $builder) use ($post) {
             $builder->whereIn("id", $post->categories->pluck("id"));
         })->where('id', "!=", $post->id)->get();
+
+        SEOTools::setTitle($post->title);
+        SEOTools::setDescription( $post->content );
+        SEOMeta::addMeta('article:published_time', $post->created_at->toW3cString(), 'property' );
+
+        $title = $post->title." - ".config("app.name");
+
+        Opengraph::setTitle($title);
+        Opengraph::setDescription( $post->content );
+        Opengraph::setUrl( \URL::current() );
+        Opengraph::addProperty('locale', config("app.locale"));
+        Opengraph::addImage($post->image,[ 'height'=> 300, 'width'=> 640 ]);
+
+        TwitterCard::setTitle($title);
+        TwitterCard::setUrl( \URL::current() );
+        TwitterCard::setSite("@engelnov");
+        TwitterCard::addImage($post->image);
+        TwitterCard::setType("summary_large_image");
+
+        JsonLd::setTitle($title);
+        JsonLd::setDescription($post->content );
+        JsonLd::setType("Article");
+        JsonLd::addImage($post->image);
+
+
+
         return view("blog.post", compact("post", "relatedPosts"));
     }
 
