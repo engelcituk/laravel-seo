@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Artesaos\SEOTools\Facades\SEOTools;
+use Artesaos\SEOTools\Facades\SEOMeta;
+
+
+
 class BlogController extends Controller
 {
     public function __construct() {
@@ -33,6 +38,30 @@ class BlogController extends Controller
         $featuredPosts = Post::with("categories:id,name,slug", "user:id,name,slug,avatar")->select(["id", "user_id", "title", "image", "slug", "published_at"])->where("featured", true)->get();
         $tags = Tag::select(["name", "slug"])->withCount("posts")->get();
         $posts = Post::with("tags:name,slug", "categories:name,slug", "user:id,name,slug,avatar")->select("id", "user_id", "title", "excerpt", "slug", "published_at")->where("published", true)->paginate(3);
+
+        $blogPostsImage = "https://via.placeholder.com/649x300/4B5563/FFFFFF/?text=BlogSeo";
+
+
+        SEOTools::setTitle("Blog posts- Página {$posts->currentPage()} ");
+        SEOTools::setDescription("Listado de posts de la pagina {$posts->currentPage()} ");
+        SEOTools::setCanonical( \URL::full() );
+
+        if($posts->nextPageUrl()){
+            SEOMeta::setNext( $posts->nextPageUrl() );
+        }
+
+        if($posts->previousPageUrl()){
+            SEOMeta::setPrev( $posts->previousPageUrl() );
+        }
+
+        SEOTools::opengraph()->setUrl(\URL::current());
+        SEOTools::opengraph()->addImage($blogPostsImage);
+        SEOTools::opengraph()->addProperty("type", "articles");
+
+
+        SEOTools::twitter()->setSite("@engelnov");
+        SEOTools::twitter()->setImage($blogPostsImage);
+        SEOTools::twitter()->setType("summary_large_image");
 
         return view("blog.index", compact("posts", "categories", "authors", "featuredPosts", "tags"));
     }
