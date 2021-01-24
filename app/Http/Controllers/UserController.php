@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\Opengraph;
-use Artesaos\SEOTools\Facades\TwitterCard;
-use Artesaos\SEOTools\Facades\JsonLd;
-
 
 class UserController extends Controller
 {
