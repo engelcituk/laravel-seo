@@ -17,9 +17,6 @@ use Artesaos\SEOTools\Facades\Opengraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
 use Artesaos\SEOTools\Facades\JsonLd;
 
-
-
-
 class BlogController extends Controller
 {
     public function __construct() {
