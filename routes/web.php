@@ -26,6 +26,10 @@ Route::get("/user/{user}", \App\Http\Controllers\UserController::class)->name("u
 Route::get("/category/{category}", \App\Http\Controllers\CategoryController::class)->name("posts_category");
 Route::get("/tag/{tag}", \App\Http\Controllers\TagController::class)->name("posts_tag");
 
+Route::get("/sitemap-manually", [\App\Http\Controllers\SiteMapController::class,"manually"])->name("manually");
+Route::get("/sitemap-automatic", [\App\Http\Controllers\SiteMapController::class,"automatic"])->name("automatic");
+
+
 require __DIR__.'/auth.php';
 
 Route::get("{post}", [BlogController::class, "show"])->name("blog.show");

@@ -6,10 +6,6 @@ use App\Models\Tag;
 
 use Artesaos\SEOTools\Facades\SEOTools;
 use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\Opengraph;
-use Artesaos\SEOTools\Facades\TwitterCard;
-use Artesaos\SEOTools\Facades\JsonLd;
-
 
 class TagController extends Controller
 {
